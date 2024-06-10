@@ -3,9 +3,16 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-    @users = User.all
+    total_users = User.all.count
 
-    render json: {data: @users}, status: :ok
+    page = (params[:page].to_i <= 0) ? 1 : params[:page].to_i
+    limit = (params[:limit].to_i <= 0) ? 10 : params[:limit].to_i
+
+    offset = (page - 1) * limit
+
+    @users = User.limit(limit).offset(offset)
+
+    render json: {data: @users, total: total_users}, status: :ok
   end
 
   # GET /users/1

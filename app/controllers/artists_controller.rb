@@ -3,9 +3,17 @@ class ArtistsController < ApplicationController
 
   # GET /artists
   def index
-    @artists = Artist.all
 
-    render json: {data: @artists}, status: :ok
+    total_artists = Artist.all.count
+
+    page = (params[:page].to_i <= 0) ? 1 : params[:page].to_i
+    limit = (params[:limit].to_i <= 0) ? 10 : params[:limit].to_i
+
+    offset = (page - 1) * limit
+
+    @artists = Artist.limit(limit).offset(offset)
+
+    render json: {data: @artists, total: total_artists}, status: :ok
   end
 
   # GET /artists/1
@@ -15,7 +23,6 @@ class ArtistsController < ApplicationController
 
   # POST /artists
   def create
-    puts "params #{artist_params}"
     @artist = Artist.new(artist_params)
 
     if @artist.save

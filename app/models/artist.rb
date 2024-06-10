@@ -1,5 +1,7 @@
 class Artist < ApplicationRecord
   # include GenderEnum
+  has_many :music
+
   validates :name, presence: true, length: { maximum: 255 }
   validates :address, presence: true, length: { maximum: 255 }
 
@@ -24,7 +26,7 @@ class Artist < ApplicationRecord
   end
 
   def albums_released_check
-    if no_of_albums_released? && no_of_albums_released <0
+    if no_of_albums_released? && no_of_albums_released < 0
       errors.add(:error, "Invalid number of albums!")
     end
   end
