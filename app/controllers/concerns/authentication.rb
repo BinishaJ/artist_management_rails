@@ -1,12 +1,29 @@
 module Authentication
-  def current_user
-    return @current_user if @current_user
+  def authenticate_request
+    token = extract_token_from_header(request.headers['Authorization'])
+    @current_user = find_user_by_token(token)
+    render_unauthorized unless @current_user
+  end
 
-    header = request.headers['Authorization']
-    return nil if header.nil?
+  def extract_token_from_header(authorization_header)
+    authorization_header&.split(' ')&.last
+  end
 
-    decoded = JsonWebToken.decode(header)
+  def find_user_by_token(token)
+    return unless token
+    decoded_token = JsonWebToken.decode(token)
+    User.find_by(id: decoded_token[:user_id])
+  end
 
-    @current_user = User.find(decoded[:user_id]) rescue ActiveRecord::RecordNotFound
+  def render_unauthorized
+    render json: { error: 'Please login first' }, status: :unauthorized
+  end
+
+  def expired_token
+    render json: { error: 'Token expired' }, status: :forbidden
+  end
+
+  def token_error
+    render json: { error: 'Invalid token' }, status: :unauthorized
   end
 end
