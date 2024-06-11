@@ -7,7 +7,6 @@ class MusicsController < ApplicationController
 
     page = (params[:page].to_i <= 0) ? 1 : params[:page].to_i
     limit = (params[:limit].to_i <= 0) ? 10 : params[:limit].to_i
-
     offset = (page - 1) * limit
 
     @musics = Music.limit(limit).offset(offset)

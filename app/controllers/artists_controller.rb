@@ -1,5 +1,5 @@
 class ArtistsController < ApplicationController
-  before_action :set_artist, only: %i[ show update destroy ]
+  before_action :set_artist, only: %i[ show update destroy get_music ]
 
   # GET /artists
   def index
@@ -8,7 +8,6 @@ class ArtistsController < ApplicationController
 
     page = (params[:page].to_i <= 0) ? 1 : params[:page].to_i
     limit = (params[:limit].to_i <= 0) ? 10 : params[:limit].to_i
-
     offset = (page - 1) * limit
 
     @artists = Artist.limit(limit).offset(offset)
@@ -19,6 +18,13 @@ class ArtistsController < ApplicationController
   # GET /artists/1
   def show
     render json: @artist, status: :ok
+  end
+
+  # GET /artists/1/music
+  def get_music
+    @musics = Music.where(artist_id: params[:id])
+
+    render json: {data: @musics}, status: :ok
   end
 
   # POST /artists

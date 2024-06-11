@@ -5,12 +5,12 @@ class User < ApplicationRecord
 
   enum gender: {m: 'male', f: 'female', o: 'others'}, _prefix: true
 
-  validates :first_name, presence: true, length: { maximum: 255 }
-  validates :last_name, presence: true, length: { maximum: 255 }
+  validates :first_name, length: { maximum: 255 }
+  validates :last_name, length: { maximum: 255 }
   validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL }
   validates :password_digest, length: { maximum: 500 }
-  validates :phone, presence: true, length: { maximum: 20 }
-  validates :address, presence: true, length: { maximum: 255 }
+  validates :phone, length: { maximum: 20 }
+  validates :address, length: { maximum: 255 }
 
   validate :email_check
   validate :dob_check
