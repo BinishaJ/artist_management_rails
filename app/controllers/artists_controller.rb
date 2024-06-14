@@ -1,6 +1,8 @@
 class ArtistsController < ApplicationController
   before_action :set_artist, only: %i[ show update destroy get_music ]
 
+  load_and_authorize_resource
+
   # GET /artists
   def index
 
@@ -34,7 +36,7 @@ class ArtistsController < ApplicationController
     if @artist.save
       render json: @artist, status: :created, location: @artist
     else
-      render json: @artist.errors, status: :unprocessable_entity
+      render json: {error: @artist.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
@@ -43,7 +45,7 @@ class ArtistsController < ApplicationController
     if @artist.update(artist_params)
       render json: @artist
     else
-      render json: @artist.errors, status: :unprocessable_entity
+      render json: {error: @artist.errors.full_messages}, status: :unprocessable_entity
     end
   end
 

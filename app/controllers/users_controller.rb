@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
 
+  load_and_authorize_resource
+
   # GET /users
   def index
     total_users = User.all.count
@@ -26,7 +28,8 @@ class UsersController < ApplicationController
     if @user.save
       render json: @user, status: :created, location: @user
     else
-      render json: @user.errors, status: :unprocessable_entity
+      p "Error #{@user.errors.full_messages}"
+      render json: {error: @user.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
@@ -35,7 +38,7 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       render json: @user
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render json: {error: @user.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
@@ -52,6 +55,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.permit(:first_name, :last_name, :email, :password, :phone, :dob, :gender, :address)
+      params.permit(:first_name, :last_name, :email, :password, :phone, :dob, :gender, :address, :role_id)
     end
 end

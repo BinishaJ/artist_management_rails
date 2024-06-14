@@ -3,6 +3,7 @@ class Music < ApplicationRecord
 
   validates :title, presence: true, length: { maximum: 255 }
   validates :album_name, presence: true, length: { maximum: 255 }
+  validates :genre, presence: true
 
   validate :artist_exists
 

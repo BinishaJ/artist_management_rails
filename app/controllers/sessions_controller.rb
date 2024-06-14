@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
 
-  skip_before_action :authenticate_request
+  skip_before_action :current_user
 
   # POST /login
   def login
@@ -9,6 +9,7 @@ class SessionsController < ApplicationController
       render json: {
         token: JsonWebToken.encode({user_id: user.id}),
         email: user.email,
+        role_id: user.role_id
       }, status: :ok
     else
       render json: {error: 'Invalid username or password'}, status: :unauthorized

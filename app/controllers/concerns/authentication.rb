@@ -1,7 +1,8 @@
 module Authentication
-  def authenticate_request
+  def current_user
     token = extract_token_from_header(request.headers['Authorization'])
     @current_user = find_user_by_token(token)
+    return @current_user if @current_user.present?
     render_unauthorized unless @current_user
   end
 

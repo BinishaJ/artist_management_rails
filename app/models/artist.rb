@@ -4,6 +4,7 @@ class Artist < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 255 }
   validates :address, presence: true, length: { maximum: 255 }
+  validates :gender, presence: true
 
   validate :dob_check
   validate :release_year_check
@@ -31,4 +32,17 @@ class Artist < ApplicationRecord
     end
   end
 
+  def self.to_csv
+    attributes = %w{Name DOB Gender Address First\ Release\ Year No\ of\ Albums\ Released}
+
+    data = CSV.generate(headers: true) do |csv|
+      csv << attributes
+
+      all.each do |artist|
+        csv << attributes.map{ |attr| artist.send(attr.downcase.gsub(" ", "_")) }
+      end
+    end
+
+    return data
+  end
 end

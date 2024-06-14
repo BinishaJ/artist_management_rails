@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_10_113905) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_13_054726) do
   create_table "artists", force: :cascade do |t|
     t.string "name"
     t.date "dob"
@@ -31,6 +31,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_10_113905) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "permissions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "first_name"
@@ -43,6 +53,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_10_113905) do
     t.string "address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "role_id", default: 3
   end
 
 end

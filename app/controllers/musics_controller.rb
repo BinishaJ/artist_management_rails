@@ -1,6 +1,8 @@
 class MusicsController < ApplicationController
   before_action :set_music, only: %i[ show update destroy ]
 
+  load_and_authorize_resource
+
   # GET /musics
   def index
     total_musics = Music.all.count
@@ -21,12 +23,13 @@ class MusicsController < ApplicationController
 
   # POST /musics
   def create
+    p "User #{@current_user.id}"
     @music = Music.new(music_params)
 
     if @music.save
       render json: @music, status: :created, location: @music
     else
-      render json: @music.errors, status: :unprocessable_entity
+      render json: {error: @music.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
@@ -35,7 +38,7 @@ class MusicsController < ApplicationController
     if @music.update(music_params)
       render json: @music
     else
-      render json: @music.errors, status: :unprocessable_entity
+      render json: {error: @music.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
