@@ -1,21 +1,25 @@
 class ArtistsController < ApplicationController
   before_action :set_artist, only: %i[ show update destroy get_music ]
+  before_action :total_artists, only: %i[index count]
 
   load_and_authorize_resource
 
   # GET /artists
   def index
-
-    total_artists = Artist.all.count
-
     page = (params[:page].to_i <= 0) ? 1 : params[:page].to_i
     limit = (params[:limit].to_i <= 0) ? 10 : params[:limit].to_i
     offset = (page - 1) * limit
 
     @artists = Artist.limit(limit).offset(offset)
 
-    render json: {data: @artists, total: total_artists}, status: :ok
+    render json: {data: @artists, total: @total_artists}, status: :ok
   end
+
+  # GET artists/count
+  def count
+    render json: {data: @total_artists}, status: :ok
+  end
+
 
   # GET /artists/1
   def show
@@ -63,5 +67,9 @@ class ArtistsController < ApplicationController
   # Only allow a list of trusted parameters through.
   def artist_params
     params.permit(:name, :dob, :gender, :address, :first_release_year, :no_of_albums_released)
+  end
+
+  def total_artists
+    @total_artists = Artist.all.count
   end
 end

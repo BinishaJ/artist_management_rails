@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
+
+  get '/musics/count', to: 'musics#count'
   resources :musics
+
+  get '/artists/count', to: 'artists#count'
   resources :artists
+
+  get '/users/count', to: 'users#count'
   resources :users
 
   # Login API

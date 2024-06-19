@@ -1,20 +1,25 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
+  before_action :total_users, only: %i[index count]
 
   load_and_authorize_resource
 
   # GET /users
   def index
-    total_users = User.all.count
-
     page = (params[:page].to_i <= 0) ? 1 : params[:page].to_i
     limit = (params[:limit].to_i <= 0) ? 10 : params[:limit].to_i
     offset = (page - 1) * limit
 
     @users = User.limit(limit).offset(offset)
 
-    render json: {data: @users, total: total_users}, status: :ok
+    render json: {data: @users, total: @total_users}, status: :ok
   end
+
+  # GET users/count
+  def count
+    render json: {data: @total_users}, status: :ok
+  end
+
 
   # GET /users/1
   def show
@@ -57,4 +62,8 @@ class UsersController < ApplicationController
     def user_params
       params.permit(:first_name, :last_name, :email, :password, :phone, :dob, :gender, :address, :role_id)
     end
+
+  def total_users
+    @total_users = User.all.count
+  end
 end

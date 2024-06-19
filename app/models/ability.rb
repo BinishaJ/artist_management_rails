@@ -5,6 +5,9 @@ class Ability
 
   def initialize(user)
     can :login, SessionsController, public: true
+    can :count, Music, public: true
+    can :count, User, public: true
+    can :count, Artist, public: true
 
     can :manage, Music if user.role.id == 3
     can :get_music, Artist if user.role.id == 3

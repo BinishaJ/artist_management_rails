@@ -1,19 +1,23 @@
 class MusicsController < ApplicationController
   before_action :set_music, only: %i[ show update destroy ]
+  before_action :total_music, only: %i[index count]
 
   load_and_authorize_resource
 
   # GET /musics
   def index
-    total_musics = Music.all.count
-
     page = (params[:page].to_i <= 0) ? 1 : params[:page].to_i
     limit = (params[:limit].to_i <= 0) ? 10 : params[:limit].to_i
     offset = (page - 1) * limit
 
     @musics = Music.limit(limit).offset(offset)
 
-    render json: {data: @musics, total: total_musics}, status: :ok
+    render json: {data: @musics, total: @total_music}, status: :ok
+  end
+
+  # GET musics/count
+  def count
+    render json: {data: @total_music}, status: :ok
   end
 
   # GET /musics/1
@@ -57,4 +61,8 @@ class MusicsController < ApplicationController
     def music_params
       params.permit(:artist_id, :title, :album_name, :genre)
     end
+
+  def total_music
+    @total_music = Music.all.count
+  end
 end
