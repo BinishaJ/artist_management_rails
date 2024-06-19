@@ -15,12 +15,13 @@ class User < ApplicationRecord
   validates :phone, length: { maximum: 20 }
   validates :address, length: { maximum: 255 }
 
-  # validate :email_check
   validate :dob_check
+  # validate :email_check
 
   private
 
   def dob_check
+    p "D #{Date.today}"
     if dob? && dob >= Date.today
       errors.add(:error, "Invalid date of birth!")
     end

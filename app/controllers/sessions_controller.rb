@@ -4,6 +4,7 @@ class SessionsController < ApplicationController
 
   # POST /login
   def login
+    p "Params #{params}"
     user = User.find_by(email: params[:email])
     if user && user.authenticate(params[:password])
       render json: {

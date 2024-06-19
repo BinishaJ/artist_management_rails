@@ -8,7 +8,7 @@ class CsvController < ApplicationController
   def import
     file = params.permit(:file)
 
-    authorize! :import, :export
+    # authorize! :import, :export
 
     opened_file = File.open(file)
     options = { headers: true, col_sep: ',' }
