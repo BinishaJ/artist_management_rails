@@ -15,6 +15,13 @@ class ArtistsController < ApplicationController
     render json: {data: @artists, total: @total_artists}, status: :ok
   end
 
+  #GET /artists/all
+  def all
+    @artists = Artist.all
+
+    render json: {data: @artists}, status: :ok
+  end
+
   # GET artists/count
   def count
     render json: {data: @total_artists}, status: :ok

@@ -6,31 +6,40 @@ class CsvController < ApplicationController
 
   # POST /csv
   def import
-    file = params.permit(:file)
+    begin
+      file = params[:file]  # Assuming 'file' is the name of your file input in the form
 
-    # authorize! :import, :export
-
-    opened_file = File.open(file)
-    options = { headers: true, col_sep: ',' }
-    CSV.foreach(opened_file, **options).with_index do |row, index|
-
-      artist_hash = {}
-      artist_hash[:name] = row['Name']
-      artist_hash[:dob] = row['DOB']
-      artist_hash[:gender] = row['Gender']
-      artist_hash[:address] = row['Address']
-      artist_hash[:first_release_year] = row['First Release Year']
-      artist_hash[:no_of_albums_released] = row['No of Albums Released']
-
-      @artist = Artist.new(artist_hash)
-
-      unless @artist.save
-        render json: {error: @artist.errors.full_messages}, status: :unprocessable_entity
+      if file.nil?
+        render json: { error: 'No file attached' }, status: :unprocessable_entity
         return
       end
-    end
 
-    render json: {data: "Artists imported successfully"}
+      # Process the uploaded file
+      opened_file = file.tempfile  # Access the uploaded file's temporary file
+
+      options = { headers: true, col_sep: ',' }
+      CSV.foreach(opened_file, **options).with_index do |row, index|
+        artist_hash = {
+          name: row['Name'],
+          dob: row['DOB'],
+          gender: row['Gender'],
+          address: row['Address'],
+          first_release_year: row['First Release Year'],
+          no_of_albums_released: row['No of Albums Released']
+        }
+
+        @artist = Artist.new(artist_hash)
+
+        unless @artist.save
+          render json: { error: @artist.errors.full_messages }, status: :unprocessable_entity
+          return
+        end
+      end
+
+      render json: { data: "Artists imported successfully" }, status: :ok
+    rescue => e
+      render json: { error: e.message }, status: :unprocessable_entity
+    end
   end
 
   # GET /csv

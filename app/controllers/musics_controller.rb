@@ -6,12 +6,7 @@ class MusicsController < ApplicationController
 
   # GET /musics
   def index
-    page = (params[:page].to_i <= 0) ? 1 : params[:page].to_i
-    limit = (params[:limit].to_i <= 0) ? 10 : params[:limit].to_i
-    offset = (page - 1) * limit
-
-    @musics = Music.limit(limit).offset(offset)
-
+    @musics = Music.all
     render json: {data: @musics, total: @total_music}, status: :ok
   end
 

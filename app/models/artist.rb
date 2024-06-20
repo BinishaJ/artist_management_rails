@@ -1,6 +1,6 @@
 class Artist < ApplicationRecord
   # include GenderEnum
-  has_many :music
+  has_many :music, :dependent => :destroy
 
   validates :name, presence: true, length: { maximum: 255 }
   validates :address, presence: true, length: { maximum: 255 }

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :musics
 
   get '/artists/count', to: 'artists#count'
+  get '/artists/all', to: 'artists#all'
   resources :artists
 
   get '/users/count', to: 'users#count'
