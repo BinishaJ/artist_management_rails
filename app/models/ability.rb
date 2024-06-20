@@ -4,7 +4,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    can :login, SessionsController, public: true
+    can [:login,:register], SessionsController, public: true
     can :count, Music, public: true
     can :count, User, public: true
     can [:count, :all], Artist, public: true

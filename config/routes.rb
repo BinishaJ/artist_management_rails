@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   # Login API
   post '/login', to: 'sessions#login'
+  post '/register', to: 'sessions#register'
 
   # Music API for artist
   get '/artists/:id/music', to: 'artists#get_music'

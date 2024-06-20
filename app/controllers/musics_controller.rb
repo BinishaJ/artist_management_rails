@@ -22,7 +22,6 @@ class MusicsController < ApplicationController
 
   # POST /musics
   def create
-    p "User #{@current_user.id}"
     @music = Music.new(music_params)
 
     if @music.save
