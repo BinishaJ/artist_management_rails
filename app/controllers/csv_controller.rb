@@ -7,15 +7,19 @@ class CsvController < ApplicationController
   # POST /csv
   def import
     begin
-      file = params[:file]  # Assuming 'file' is the name of your file input in the form
+      file = params[:file]
 
       if file.nil?
         render json: { error: 'No file attached' }, status: :unprocessable_entity
         return
       end
 
-      # Process the uploaded file
-      opened_file = file.tempfile  # Access the uploaded file's temporary file
+      if file.content_type != 'text/csv'
+        render json: { error: 'File type not accepted' }, status: :bad_request
+        return
+      end
+
+      opened_file = file.tempfile
 
       options = { headers: true, col_sep: ',' }
       CSV.foreach(opened_file, **options).with_index do |row, index|

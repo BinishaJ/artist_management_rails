@@ -53,7 +53,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_13_054726) do
     t.string "address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "role_id", default: 3
+    t.integer "role_id", default: 1
   end
 
 end
